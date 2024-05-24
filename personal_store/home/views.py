@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.utils.translation import gettext_lazy as _,activate
 from . import forms,models
 from django.contrib import auth
@@ -7,7 +7,8 @@ from django.contrib.auth.models import User
 
 # Create your views here.
 def home_(r):
-    return render(r,"home.html")
+    items=models.item.objects.all().order_by("-date")
+    return render(r,"home.html",{"items":items})
 def Contect(r):
     return render(r,"contect.html")
 def about(r):
@@ -110,3 +111,6 @@ def changeProfiel(r):
             profile.save()
     frm=forms.editProfile({"first_name":user1.first_name,"last_name":user1.last_name,"email":user1.email,"country":profile.country,"currency":profile.currency})
     return render(r,"change_profile.html",{"form":frm})
+def viewItem(r,pk):
+    item=get_object_or_404(models.item,pk=pk)
+    return render(r,"viewItem.html",{"item":item})

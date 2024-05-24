@@ -32,7 +32,12 @@
     </nav>
     {%block content%}
     <section id="content">
-    <h1>{%trans "welcom"%}</h1>
+    {% for item in items%}
+    <h2><a href="{% url "viewItem" item.pk%}">{{item.name}}</a></h2>
+    <img src="{{item.image}}" alt="item image">
+    <p>{{item.summery}}</p>
+    <p>{{item.price}}$</p>
+    {%endfor%}
     </section>
     {%endblock%}
     <footer id="footer">

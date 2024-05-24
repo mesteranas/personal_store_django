@@ -11,5 +11,6 @@ urlpatterns=[
  path("accounts/settings",views.settings,name="accountSettings")   ,
  path("accounts/delete",views.deletacc,name="deleteaccount"),
  path("accounts/changePassword",views.changePassword,name="changePassword"),
- path("account/changeProfile",views.changeProfiel,name="changeProfile")
+ path("account/changeProfile",views.changeProfiel,name="changeProfile"),
+ path("item/<int:pk>",views.viewItem,name="viewItem")
 ]

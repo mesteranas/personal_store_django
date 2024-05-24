@@ -1,0 +1,15 @@
+{% extends "home.html"%}
+{% load i18n%}
+{% block title%}{{item.name}}{% endblock%}
+{% block content%}
+<h2>{{item.name}}</h2>
+<img src="{{item.image}}" alt="item image">
+<p>{{item.summery}}</p>
+<p>{{item.price}} $</p>
+<h3>{% trans "description"%}</h3>
+<p><pre>{{item.description}}</pre></p>
+<h3>information</h3>
+<p><pre>
+    {{item.information}}
+</pre></p>
+{% endblock%}
