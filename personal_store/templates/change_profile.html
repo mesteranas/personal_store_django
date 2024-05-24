@@ -1,0 +1,12 @@
+{% extends "home.html" %}
+{% load i18n %}
+{%block title%}{% trans "edit profile"%}{%endblock%}
+{% block content%}
+<h2>{% trans "edit account "%}</h2>
+<form method="post">
+    {%csrf_token%}
+    {{form}}
+    <button type="submit">{% trans "save"%}</button>
+</form>
+
+{%endblock%}
