@@ -1,0 +1,22 @@
+{% extends "home.html"%}
+{% load i18n%}
+{% block title%}comments{% endblock%}
+{% block content%}
+<h2>{% trans "comments"%}</h2>
+{% if user.is_authenticated%}
+<form method="post">
+    {% csrf_token%}
+    {{form}}
+    <button type="submit">{% trans "send"%}</button>
+</form>
+{% else%}
+<p>{% trans "login to able to add comment"%}</p>
+{% endif%}
+{% for comment in comments%}
+<h3>{{comment.user.first_name}} {{comment.user.last_name}} {{comment.date}}</h3>
+<p><pre>{{comment.content}}</pre></p>
+{% if user == comment.user%}
+<a href="{% url "deleteComment" comment.Item.pk comment.pk%}">{% trans "delete comment"%}</a>
+{% endif%}
+{% endfor%}
+{% endblock%}

@@ -12,5 +12,7 @@ urlpatterns=[
  path("accounts/delete",views.deletacc,name="deleteaccount"),
  path("accounts/changePassword",views.changePassword,name="changePassword"),
  path("account/changeProfile",views.changeProfiel,name="changeProfile"),
- path("item/<int:pk>",views.viewItem,name="viewItem")
+ path("item/<int:pk>",views.viewItem,name="viewItem"),
+ path("item/<int:pk>/comments",views.comment,name="comments"),
+ path("item/<int:itemPk>/comments/<int:commentPk>/delete",views.deleteComment,name="deleteComment")
 ]

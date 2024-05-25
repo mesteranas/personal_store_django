@@ -26,4 +26,5 @@ class editProfile(forms.Form):
     email=forms.CharField(label="email",widget=forms.EmailInput())
     country=forms.ChoiceField(label="country",choices=dictionarys.countries,required=True)
     currency=forms.ChoiceField(label="currency",choices=dictionarys.currencies,required=True)
-
+class Comment(forms.Form):
+    content=forms.CharField(label="add comment ...",widget=forms.Textarea())

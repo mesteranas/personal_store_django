@@ -4,7 +4,7 @@ from . import forms,models,currencyConverter
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-
+from django.http import Http404
 # Create your views here.
 def home_(r):
     items=models.item.objects.all().order_by("-date")
@@ -121,3 +121,26 @@ def viewItem(r,pk):
         currencyValue="please login firstly to able to convert to your currency"
     
     return render(r,"viewItem.html",{"item":item,"currencyValue":currencyValue})
+def comment(r,pk):
+    item=get_object_or_404(models.item,pk=pk)
+    comments=models.comment.objects.filter(Item=item).order_by("-date")
+    user=get_object_or_404(User,username=r.user)
+    if r.method=="POST":
+        frm=forms.Comment(r.POST)
+        if frm.is_valid():
+            content=frm.cleaned_data["content"]
+            NewComment=models.comment(user=user,Item=item,content=content)
+            NewComment.save()
+    frm=forms.Comment()
+    return render(r,"comments.html",{"comments":comments,"form":frm})
+@login_required
+def deleteComment(r,itemPk,commentPk):
+    user=get_object_or_404(User,username=r.user)
+    item=get_object_or_404(models.item,pk=itemPk)
+    comment=get_object_or_404(models.comment,pk=commentPk)
+    if comment.user!=user:
+        res Http404("you can't delete this comment")
+    if r.method=="POST":
+        comment.delete()
+        return redirect("homePage")
+    return render(r,"deleteComment.html")

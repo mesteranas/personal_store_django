@@ -30,4 +30,4 @@ class comment(models.Model):
     user=models.ForeignKey(to=User,on_delete=models.CASCADE)
     date=models.DateTimeField(auto_now=True)
     def __str__(self):
-        return self.date
+        return self.user.username+str(self.date)

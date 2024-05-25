@@ -1,0 +1,10 @@
+{% extends "home.html"%}
+{% load i18n%}
+{% block title%}delete comment{% endblock%}
+{% block content%}
+<h2>{% trans "wold you like to delete this comment"%}</h2>
+<form method="post">
+    {% csrf_token%}
+    <button type="submit">{% trans "delete"%}</button>
+</form>
+{% endblock%}
