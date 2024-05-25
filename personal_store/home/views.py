@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.utils.translation import gettext_lazy as _,activate
-from . import forms,models
+from . import forms,models,currencyConverter
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -113,4 +113,11 @@ def changeProfiel(r):
     return render(r,"change_profile.html",{"form":frm})
 def viewItem(r,pk):
     item=get_object_or_404(models.item,pk=pk)
-    return render(r,"viewItem.html",{"item":item})
+    if r.user.is_authenticated:
+        user=get_object_or_404(User,username=r.user)
+        profile=get_object_or_404(models.Profile,user=user)
+        currencyValue=str(currencyConverter.convert("USD",profile.currency,item.price))+profile.currency
+    else:
+        currencyValue="please login firstly to able to convert to your currency"
+    
+    return render(r,"viewItem.html",{"item":item,"currencyValue":currencyValue})
