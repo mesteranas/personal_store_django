@@ -8,6 +8,8 @@
 <p>{{item.price}} $</p>
 <p>{{currencyValue}}</p>
 <p>available items {{item.itemsCount}}</p>
+<p>{% trans "date"%} {{item.date}}</p>
+<p>{% trans "category"%}<a href="{% url "Items" item.category "date"%}"> {{item.category}}</a></p>
 <h3>{% trans "description"%}</h3>
 <p><pre>{{item.description}}</pre></p>
 <h3>information</h3>
@@ -15,4 +17,9 @@
     {{item.information}}
 </pre></p>
 <h3><a href="{% url "comments" item.pk%}">{% trans "comments"%}</a></h3>
+{% if item.itemsCount != 0%}
+<h3><a href="{% url "buy" item.pk%}">{% trans "buy"%}</a></h3>
+{%else%}
+<p>{% trans "no items available to buy"%}</p>
+{%endif%}
 {% endblock%}

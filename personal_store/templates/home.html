@@ -32,6 +32,12 @@
     </nav>
     {%block content%}
     <section id="content">
+        <a href="{% url "search"%}">{% trans "search"%}</a>
+        <form method="post">
+            {% csrf_token%}
+            {{form}}
+            <button type="submit">{% trans "update"%}</button>
+        </form>
     {% for item in items%}
     {% if not item.itemsCount == 0%}
     <h2><a href="{% url "viewItem" item.pk%}">{{item.name}}</a></h2>

@@ -1,5 +1,5 @@
 from django import forms
-from . import dictionarys
+from . import dictionarys,models
 class new_accound (forms.Form):
     frist_name=forms.CharField(label="frist name")
     last_name=forms.CharField(label="last name")
@@ -28,3 +28,20 @@ class editProfile(forms.Form):
     currency=forms.ChoiceField(label="currency",choices=dictionarys.currencies,required=True)
 class Comment(forms.Form):
     content=forms.CharField(label="add comment ...",widget=forms.Textarea())
+class Items(forms.Form):
+    def getCategory():
+        categories=[("all","all")]
+        for item in models.item.objects.all().order_by("-date"):
+            List=(item.category,item.category)
+            if List in categories:
+                continue
+            categories.append(List)
+        return categories
+
+    category=forms.ChoiceField(choices=getCategory(),label="category")
+    sort=forms.ChoiceField(choices={"date":"date","itemsCount":"available items","price":"price"},label="sort by")
+
+class Card(forms.Form):
+    cardNumber=forms.CharField(label="card number",widget=forms.NumberInput())
+    mmyy=forms.CharField(label="MM/YY",widget=forms.NumberInput())
+    cvc=forms.CharField(label="cvc",widget=forms.NumberInput())

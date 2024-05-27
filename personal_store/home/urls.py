@@ -14,5 +14,8 @@ urlpatterns=[
  path("account/changeProfile",views.changeProfiel,name="changeProfile"),
  path("item/<int:pk>",views.viewItem,name="viewItem"),
  path("item/<int:pk>/comments",views.comment,name="comments"),
- path("item/<int:itemPk>/comments/<int:commentPk>/delete",views.deleteComment,name="deleteComment")
+ path("item/<int:itemPk>/comments/<int:commentPk>/delete",views.deleteComment,name="deleteComment"),
+ path("items/category=<str:category>&sort=<str:sort>",views.home_,name="Items"),
+ path("items/search",views.search,name="search"),
+ path("item/<int:pk>/buy",views.buy,name="buy")
 ]

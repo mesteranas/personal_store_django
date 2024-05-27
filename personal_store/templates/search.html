@@ -1,0 +1,23 @@
+{% extends "home.html"%}
+{% load i18n%}
+{% block title%}search{% endblock%}
+{% block content%}
+<h2>{% trans "search"%}</h2>
+<form method="post">
+    {% csrf_token%}
+    <label for="id_search">{% trans "search ... "%}</label>
+    <input type="text" name="search" id="id_search">
+    <button type="submit">{% trans "search"%}</button>
+</form>
+<h3 id="results">{% trans "search results"%}</h3>
+{% if results%}
+<script>
+    document.getElementById("results").focus()
+</script>
+{% for result in results%}
+<h4><a href="{% url "viewItem" result.pk%}">{{result.name}}</a></h4>
+{% endfor%}
+{% else%}
+<p>{% trans "no results fownd"%}</p>
+{% endif%}
+{% endblock%}

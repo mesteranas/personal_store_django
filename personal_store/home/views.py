@@ -5,10 +5,19 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import Http404
+from django.db.models import Q
 # Create your views here.
-def home_(r):
-    items=models.item.objects.all().order_by("-date")
-    return render(r,"home.html",{"items":items})
+def home_(r,category="all",sort="date"):
+    if r.method=="POST":
+        form=forms.Items(r.POST)
+        if form.is_valid():
+            return redirect("Items",category=form.cleaned_data["category"],sort=form.cleaned_data["sort"])
+    if category=="all":
+        items=models.item.objects.all().order_by("-" + sort)
+    else:
+        items=models.item.objects.filter(category=category).order_by("-" + sort)
+    form=forms.Items({"category":category,"sort":sort})
+    return render(r,"home.html",{"items":items,"form":form})
 def Contect(r):
     return render(r,"contect.html")
 def about(r):
@@ -124,8 +133,8 @@ def viewItem(r,pk):
 def comment(r,pk):
     item=get_object_or_404(models.item,pk=pk)
     comments=models.comment.objects.filter(Item=item).order_by("-date")
-    user=get_object_or_404(User,username=r.user)
     if r.method=="POST":
+        user=get_object_or_404(User,username=r.user)
         frm=forms.Comment(r.POST)
         if frm.is_valid():
             content=frm.cleaned_data["content"]
@@ -139,8 +148,16 @@ def deleteComment(r,itemPk,commentPk):
     item=get_object_or_404(models.item,pk=itemPk)
     comment=get_object_or_404(models.comment,pk=commentPk)
     if comment.user!=user:
-        res Http404("you can't delete this comment")
+        return Http404("you can't delete this comment")
     if r.method=="POST":
         comment.delete()
         return redirect("homePage")
     return render(r,"deleteComment.html")
+def search(r):
+    results=[]
+    if r.method=="POST":
+        results=models.item.objects.filter(Q(name__icontains=r.POST["search"])).order_by("-date")
+    return render(r,"search.html",{"results":results})
+def buy(r,pk):
+    frm=forms.Card()
+    return render(r,"buy.html",{"form":frm})
