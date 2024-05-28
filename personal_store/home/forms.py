@@ -8,6 +8,7 @@ class new_accound (forms.Form):
     gender=forms.ChoiceField(label="gender",choices=[("male","male"),("female","female")],required=True)
     country=forms.ChoiceField(label="country",choices=dictionarys.countries,required=True)
     currency=forms.ChoiceField(label="currency",choices=dictionarys.currencies,required=True)
+    address=forms.CharField(label="address",widget=forms.Textarea())
 
     password=forms.CharField(label="password",min_length=8,widget=forms.PasswordInput())
     confpassword=forms.CharField(label="confirm password",min_length=8,widget=forms.PasswordInput())
@@ -26,6 +27,7 @@ class editProfile(forms.Form):
     email=forms.CharField(label="email",widget=forms.EmailInput())
     country=forms.ChoiceField(label="country",choices=dictionarys.countries,required=True)
     currency=forms.ChoiceField(label="currency",choices=dictionarys.currencies,required=True)
+    address=forms.CharField(label="address",widget=forms.Textarea())
 class Comment(forms.Form):
     content=forms.CharField(label="add comment ...",widget=forms.Textarea())
 class Items(forms.Form):

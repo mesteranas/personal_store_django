@@ -41,10 +41,11 @@ def newaccound(r):
             confpassword=frm.cleaned_data["confpassword"]
             currency=frm.cleaned_data["currency"]
             country=frm.cleaned_data["country"]
+            address=frm.cleaned_data["address"]
             if not User.objects.filter(username=userName).exists():
                 if password==confpassword:
                     user=User.objects.create_user(userName,email,password,first_name=fristName,last_name=lastName)
-                    profile=models.Profile(user=user,gender=gender,country=country,currency=currency)
+                    profile=models.Profile(user=user,gender=gender,country=country,currency=currency,address=address)
                     profile.save()
                     auth.login(r,user)
                     return redirect("homePage")
@@ -111,14 +112,16 @@ def changeProfiel(r):
             email=frm.cleaned_data["email"]
             country=frm.cleaned_data["country"]
             currency=frm.cleaned_data["currency"]
+            address=frm.cleaned_data["address"]
             user1.first_name=firstname
             user1.last_name=lastname
             user1.email=email
             user1.save()
             profile.currency=currency
             profile.country=country
+            profile.address=address
             profile.save()
-    frm=forms.editProfile({"first_name":user1.first_name,"last_name":user1.last_name,"email":user1.email,"country":profile.country,"currency":profile.currency})
+    frm=forms.editProfile({"first_name":user1.first_name,"last_name":user1.last_name,"email":user1.email,"country":profile.country,"currency":profile.currency,"address":profile.address})
     return render(r,"change_profile.html",{"form":frm})
 def viewItem(r,pk):
     item=get_object_or_404(models.item,pk=pk)

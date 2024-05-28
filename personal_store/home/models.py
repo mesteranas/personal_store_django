@@ -8,6 +8,7 @@ class Profile (models.Model):
     gender=models.CharField(choices={"male":"male","female":"female"},default="male",max_length=20)
     country=models.CharField(max_length=10,choices=dictionarys.countries,default="us")
     currency=models.CharField(max_length=10,choices=dictionarys.currencies,default="USD")
+    address=models.TextField()
     user=models.OneToOneField(User,models.CASCADE)
     def __str__(self):
         return "{} {}".format(self.user.first_name,self.user.last_name)
