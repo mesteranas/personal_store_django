@@ -5,6 +5,6 @@ class items(serializers.ModelSerializer):
         model=models.item
         fields = ['id', 'name', 'description', 'price', 'summery', 'image', 'buyCount', 'category', 'date', 'itemsCount', 'information']
 class Comments(serializers.ModelSerializer):
-    class meta:
+    class Meta:
         model=models.comment
         fields=["id","content","Item","user","date"]

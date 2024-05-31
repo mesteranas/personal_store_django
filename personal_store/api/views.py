@@ -35,4 +35,8 @@ class Comments(APIView):
         except:
             return response.Response([],status=status.HTTP_400_BAD_REQUEST)
         ser=serializers.Comments(model,many=True)
+        for item in ser.data:
+            user=get_object_or_404(models.User,pk=item["user"])
+            item["user"]=user.first_name + " " + user.last_name
+
         return response.Response(ser.data)
