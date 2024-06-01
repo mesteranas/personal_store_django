@@ -3,6 +3,9 @@ from home import models
 from . import serializers
 from rest_framework import generics,status,response
 from rest_framework.views import APIView
+from django.contrib.auth.models import User
+from django.contrib import auth
+from rest_framework.authtoken.models import Token
 # Create your views here.
 class viewItems(APIView):
     def getCategory(self):
@@ -40,3 +43,21 @@ class Comments(APIView):
             item["user"]=user.first_name + " " + user.last_name
 
         return response.Response(ser.data)
+class CreateNewAccount(APIView):
+    def post(self,r):
+        data=r.data
+        if not User.objects.filter(username=data["username"]).exists():
+            user=User.objects.create_user(username=data["username"],email=data["email"],password=data["password"],first_name=data["first_name"],last_name=data["last_name"])
+            profile=models.Profile(user=user,gender=data["gender"],country=data["country"],currency=data["currency"],address=data["address"])
+            profile.save()
+            token,created=Token.objects.get_or_create(user=user)
+            return response.Response({"code":0,"token":token.key})
+        return response.Response({"code":1},status=status.HTTP_400_BAD_REQUEST)
+class login(APIView):
+    def post(self,r):
+        data=r.data
+        user=auth.authenticate(username=data["username"],password=data["password"])
+        if user:
+            token,created=Token.objects.get_or_create(user=user)
+            return response.Response({"code":0,"token":token.key})
+        return response.Response({"code":1},status=status.HTTP_400_BAD_REQUEST)
