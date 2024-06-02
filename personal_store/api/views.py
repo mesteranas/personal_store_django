@@ -7,6 +7,10 @@ from django.contrib.auth.models import User
 from django.contrib import auth
 from rest_framework.authtoken.models import Token
 # Create your views here.
+def is_auth(r):
+    apiKey=r.data["api"]
+    token=get_object_or_404(Token,key=apiKey)
+    return token.user
 class viewItems(APIView):
     def getCategory(self):
         categories=["all"]
@@ -60,4 +64,43 @@ class login(APIView):
         if user:
             token,created=Token.objects.get_or_create(user=user)
             return response.Response({"code":0,"token":token.key})
+        return response.Response({"code":1},status=status.HTTP_400_BAD_REQUEST)
+class ChangePassword(APIView):
+    def post(self,r):
+        data=r.data
+        user=is_auth(r)
+        userModel=get_object_or_404(User,username=user)
+        if userModel.check_password(data["currentPassword"]):
+            userModel.set_password(data["newPassword"])
+            return response.Response({"code":0})
+        return response.Response({"code":1},status=status.HTTP_400_BAD_REQUEST)
+class EditProfile(APIView):
+    def post(self,r):
+        data=r.data
+        user=is_auth(r)
+        userModel=get_object_or_404(User,username=user)
+        profile=get_object_or_404(models.Profile,user=userModel)
+        userModel.first_name=data["firstName"]
+        userModel.last_name=data["lastName"]
+        userModel.email=data["email"]
+        userModel.save()
+        profile.country=data["country"]
+        profile.currency=data["currency"]
+        profile.address=data["address"]
+        profile.save()
+        profile.save()
+        return response.Response({"code":0})
+class ViewProfile(APIView):
+    def post(self,r):
+        user=is_auth(r)
+        userModel=get_object_or_404(User,username=user)
+        profile=get_object_or_404(models.Profile,user=userModel)
+        return response.Response({"firstName":userModel.first_name,"lastName":userModel.last_name,"email":userModel.email,"country":profile.country,"currency":profile.currency,"address":profile.address})
+class DeleteAccount(APIView):
+    def post(self,r):
+        user=is_auth(r)
+        userModel=get_object_or_404(User,username=user)
+        if userModel.check_password(r.data["password"]):
+            userModel.delete()
+            return response.Response({"code":0})
         return response.Response({"code":1},status=status.HTTP_400_BAD_REQUEST)
