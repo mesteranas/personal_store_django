@@ -72,6 +72,7 @@ class ChangePassword(APIView):
         userModel=get_object_or_404(User,username=user)
         if userModel.check_password(data["currentPassword"]):
             userModel.set_password(data["newPassword"])
+            userModel.save()
             return response.Response({"code":0})
         return response.Response({"code":1},status=status.HTTP_400_BAD_REQUEST)
 class EditProfile(APIView):
